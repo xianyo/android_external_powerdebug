@@ -86,6 +86,10 @@ static int gpio_filter_cb(const char *name)
 static inline int read_gpio_cb(struct tree *t, void *data)
 {
 	struct gpio_info *gpio = t->private;
+	int gpio_num;
+	file_read_value(t->path, "base", "%d", &gpio_num);
+	file_write_value("/sys/class/gpio", "export","%d", &gpio_num);
+
 
 	file_read_value(t->path, "active_low", "%d", &gpio->active_low);
 	file_read_value(t->path, "value", "%d", &gpio->value);
