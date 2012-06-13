@@ -36,6 +36,7 @@ void usage(void)
 		"[ -v ]\n");
 	printf("powerdebug [ -r | -s | -c ]\n");
 	printf("  -r, --regulator 	Show regulator information\n");
+	printf("  -g, --gpio 		Show gpio information\n");
 	printf("  -s, --sensor		Show sensor information\n");
 	printf("  -c, --clock		Show clock information\n");
 	printf("  -p, --findparents	Show all parents for a particular"
@@ -246,12 +247,10 @@ int main(int argc, char **argv)
 		printf("failed to initialize sensors\n");
 		options->sensors = false;
 	}
-
 	if (gpio_init()) {
 		printf("failed to initialize gpios\n");
 		options->gpios = false;
 	}
-
 	ret = options->dump ? powerdebug_dump(options) :
 		powerdebug_display(options);
 
