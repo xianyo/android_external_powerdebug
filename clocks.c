@@ -38,7 +38,7 @@
 
 struct clock_info {
 	int flags;
-	int rate;
+	float rate;
 	int usecount;
 	bool expanded;
 	char *prefix;
@@ -63,30 +63,31 @@ static struct clock_info *clock_alloc(void)
 	return ci;
 }
 
-static inline const char *clock_rate(int *rate)
+static inline const char *clock_rate(float *rate)
 {
-        int r;
+        float r;
 
         /* GHZ */
-        r = *rate >> 30;
-        if (r) {
-                *rate = r;
+        r = *rate ;
+        if (r >= 1000000000) {
+                *rate = r/1000000000;
                 return "GHZ";
         }
 
         /* MHZ */
-        r = *rate >> 20;
-        if (r) {
-                *rate = r;
+	else if (r>=1000000) {
+                *rate = r/1000000;
                 return "MHZ";
         }
 
         /* KHZ */
-        r = *rate >> 10;
-        if (r) {
-                *rate = r;
+	else if (r>=1000) {
+                *rate = r/1000;
                 return "KHZ";
         }
+	else 
+                *rate = r;
+                return "HZ";
 
         return "";
 }
@@ -97,7 +98,7 @@ static int dump_clock_cb(struct tree *t, void *data)
 	struct clock_info *pclk;
 	const char *unit;
 	int ret = 0;
-	int rate = clk->rate;
+	float rate = clk->rate;
 
 	if (!t->parent) {
 		printf("/\n");
@@ -115,7 +116,7 @@ static int dump_clock_cb(struct tree *t, void *data)
 
 	unit = clock_rate(&rate);
 
-	printf("%s%s-- %s (flags:0x%x, usecount:%d, rate: %d %s)\n",
+	printf("%s%s-- %s (flags:0x%x, usecount:%d, rate: %f %s)\n",
 	       clk->prefix,  !t->next ? "`" : "", t->name, clk->flags,
 	       clk->usecount, rate, unit);
 
@@ -145,7 +146,7 @@ static inline int read_clock_cb(struct tree *t, void *data)
 	struct clock_info *clk = t->private;
 
 	file_read_value(t->path, "flags", "%x", &clk->flags);
-	file_read_value(t->path, "rate", "%d", &clk->rate);
+	file_read_value(t->path, "rate", "%f", &clk->rate);
 	file_read_value(t->path, "usecount", "%d", &clk->usecount);
 
 	return 0;
@@ -192,7 +193,7 @@ static int is_collapsed(struct tree *t, void *data)
 static char *clock_line(struct tree *t)
 {
 	struct clock_info *clk;
-	int rate;
+	float rate;
 	const char *clkunit;
 	char *clkrate, *clkname, *clkline = NULL;
 
