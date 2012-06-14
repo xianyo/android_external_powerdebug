@@ -19,9 +19,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#ifdef NCURES
 #include <ncurses.h>
-#include "regulator.h"
+#endif
 #include "display.h"
+#include "regulator.h"
 #include "clocks.h"
 #include "sensor.h"
 #include "gpio.h"
@@ -185,7 +187,7 @@ static int powerdebug_dump(struct powerdebug_options *options)
 
 	return 0;
 }
-
+#ifdef NCURES
 static int powerdebug_display(struct powerdebug_options *options)
 {
 	if (display_init(options->selectedwindow)) {
@@ -198,6 +200,7 @@ static int powerdebug_display(struct powerdebug_options *options)
 
 	return 0;
 }
+#endif
 
 static struct powerdebug_options *powerdebug_init(void)
 {
@@ -251,8 +254,12 @@ int main(int argc, char **argv)
 		printf("failed to initialize gpios\n");
 		options->gpios = false;
 	}
+
+#ifdef NCURES
 	ret = options->dump ? powerdebug_dump(options) :
 		powerdebug_display(options);
-
+#else
+	ret = powerdebug_dump(options);
+#endif
 	return ret < 0;
 }
