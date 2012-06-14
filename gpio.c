@@ -279,6 +279,9 @@ int gpio_init(void)
 
 	if (fill_gpio_tree())
 		return -1;
-
+#ifdef NCURES
 	return display_register(GPIO, &gpio_ops);
+#else
+	return 0;
+#endif
 }
