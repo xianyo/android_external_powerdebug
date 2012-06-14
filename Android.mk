@@ -4,9 +4,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_SHARED_LIBRARIES := libstlport
-
+ifdef NCURES
 LOCAL_STATIC_LIBRARIES := libncurses
-
+endif
 LOCAL_MODULE := powerdebug
 
 LOCAL_CPPFLAGS += \
@@ -26,9 +26,14 @@ LOCAL_C_INCLUDES += external/stlport/stlport/ \
 					external/ncurses/lib \
 					external/ncurses/include \
 					external/ncurses/include/ncurses
-
+ifdef NCURES
 LOCAL_SRC_FILES += \
 	powerdebug.c sensor.c clocks.c regulator.c \
 	display.c tree.c utils.c mainloop.c gpio.c
+else
+LOCAL_SRC_FILES += \
+	powerdebug.c sensor.c clocks.c regulator.c \
+	tree.c utils.c mainloop.c gpio.c
 
+endif
 include $(BUILD_EXECUTABLE)
