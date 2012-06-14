@@ -277,6 +277,9 @@ int sensor_init(void)
 
 	if (fill_sensor_tree())
 		return -1;
-
+#ifdef NCURES
 	return display_register(SENSOR, &sensor_ops);
+#else
+	return 0;
+#endif
 }
