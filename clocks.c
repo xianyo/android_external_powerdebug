@@ -401,6 +401,9 @@ int clock_init(void)
 
 	if (fill_clock_tree())
 		return -1;
-
+#ifdef NCURES
 	return display_register(CLOCK, &clock_ops);
+#else
+	return 0;
+#endif
 }
