@@ -242,6 +242,9 @@ int regulator_init(void)
 
 	if (fill_regulator_tree())
 		return -1;
-
+#ifdef NCURES
 	return display_register(REGULATOR, &regulator_ops);
+#else
+	return 0;
+#endif
 }
