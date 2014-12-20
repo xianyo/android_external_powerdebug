@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (C) 2011, Linaro Limited.
+ * Copyright (C) 2014 Freescale Semiconductor, Inc.
  *
  * This file is part of PowerDebug.
  *
@@ -67,11 +68,12 @@ out_free:
  * Returns 0 on success, -1 otherwise
  */
 int file_write_value(const char *path, const char *name,
-                    const char *format, void *value)
+                    const char *format, ...)
 {
         FILE *file;
         char *rpath;
         int ret;
+        va_list value;
 
         ret = asprintf(&rpath, "%s/%s", path, name);
         if (ret < 0)
