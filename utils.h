@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (C) 2011, Linaro Limited.
+ * Copyright (C) 2014 Freescale Semiconductor, Inc.
  *
  * This file is part of PowerDebug.
  *
@@ -18,7 +19,7 @@
 extern int file_read_value(const char *path, const char *name,
                            const char *format, void *value);
 extern int file_write_value(const char *path, const char *name,
-                           const char *format, void *value);
+                           const char *format, ...);
 
 
 #endif
