@@ -3,7 +3,6 @@ include $(CLEAR_VARS)
 
 
 LOCAL_MODULE_TAGS := optional
-LOCAL_SHARED_LIBRARIES := libstlport
 ifdef NCURES
 LOCAL_STATIC_LIBRARIES := libncurses
 endif
